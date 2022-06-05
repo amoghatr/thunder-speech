@@ -136,7 +136,7 @@ def load_citrinet_checkpoint(
         extract_archive(str(nemo_filepath), extract_folder)
         extract_path = Path(extract_folder)
         config_path = extract_path / "model_config.yaml"
-        sentencepiece_path = str(extract_path / "tokenizer.model")
+        sentencepiece_path = str(extract_path / "fded83c59a5043048b336c223445ea45_tokenizer.model")
         (
             encoder,
             audio_transform,
