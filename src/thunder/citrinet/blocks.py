@@ -210,7 +210,7 @@ def stem(feat_in: int) -> CitrinetBlock:
     """
     return CitrinetBlock(
         feat_in,
-        256,
+        512,
         repeat=1,
         kernel_size=(5,),
         residual=False,
@@ -234,7 +234,7 @@ def body(
         List of layers that form the body of the network.
     """
     layers = []
-    f_in = 256
+    f_in = 512
     for f, k, s in zip(filters, kernel_size, strides):
         layers.append(
             CitrinetBlock(f_in, f, kernel_size=(k,), stride=(s,), separable=True)
