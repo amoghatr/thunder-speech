@@ -108,3 +108,30 @@ Also, the idea that default parameters should be great.
 The overall organization of code and decoupling follows the pytorch-lightning ideals, with self-contained modules that try to reduce the boilerplate necessary.
 
 Finally, the transformers library inspired the simple model implementations, with a clear separation in folders containing the specific code that you need to understand each architecture and preprocessing, and their strong test suit.
+
+## Example : generating a quantized citrinet model 
+
+install the quantization_experiment branch of the repo with : pip install git+https://github.com/amoghatr/thunder-speech.git@quantization_experiment
+```
+import torch
+from thunder.registry import load_pretrained
+
+module = load_pretrained("stt_en_citrinet_256")
+module = module.eval()
+
+backend = "qnnpack"
+module.qconfig = torch.quantization.get_default_qconfig(backend)
+
+
+model_static_quantized = torch.quantization.prepare(module, inplace=False)
+
+# LOAD YOUR OWN AUDIO AT THIS STEP, TO HAVE A GOOD QUANTIZATION
+audio = torch.randn(1, 100_000)
+model_static_quantized.predict(audio)
+
+model_final = torch.quantization.convert(model_static_quantized, inplace=False)
+# Just to check that the model is working
+model_final.predict(audio)
+
+model_final.to_torchscript("quantized.pt")
+```
